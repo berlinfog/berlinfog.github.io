@@ -33,11 +33,11 @@ tensorflow和anaconda
 
 准备了20张鼠标图片，都是jpg格式，分别存放在两个文件夹下面，分成验证以及训练集（样本过少，后期会进行调整）。
 
-![1564927804916](C:\Users\10750\AppData\Roaming\Typora\typora-user-images\1564927804916.png)
+![1564927804916.png](https://i.loli.net/2019/08/05/3ghvC9qjnYIpGec.png)
 
 具体的标注过程如下:
 
-![1564928178790](C:\Users\10750\Documents\GitHub\berlinfog.github.io\_posts\typora-user-images\1564928178790.png)
+![1564928178790.png](https://i.loli.net/2019/08/05/XH2k9fweRmbQsEc.png)
 
 从而将jpg转化为xml文件，保存在原来的文件夹底下。接下来需要进行格式转换，把xml变成可以进行训练的[ TFRecords Format](https://www.tensorflow.org/api_guides/python/python_io#tfrecords_format_details) 格式。写两个小python脚本文件，第一个将文件夹内的xml文件内的信息统一记录到.csv表格中，第二个从.csv表格中创建tfrecord格式。附上对应代码： 
 
@@ -197,7 +197,7 @@ if __name__ == '__main__':
 
 主要分为三个文件，data里面存放训练集以及验证集各自的csv以及record文档，image放图，train放训练的模型
 
-![1564928785498](C:\Users\10750\Documents\GitHub\berlinfog.github.io\_posts\typora-user-images\1564928785498.png)
+![1564928785498.png](https://i.loli.net/2019/08/05/kmwTAvWCHrd2iy9.png)
 
 接下来需要设置配置文件，在objec_detection/samples下，寻找需要的对于模型的config文件，
 
@@ -403,15 +403,15 @@ item {
 
 data文件夹：
 
-![1564929467154](C:\Users\10750\Documents\GitHub\berlinfog.github.io\_posts\typora-user-images\1564929467154.png)
+![1564929467154.png](https://i.loli.net/2019/08/05/vzoenRXJDr62bt4.png)
 
 images文件夹：
 
-![1564929489817](C:\Users\10750\Documents\GitHub\berlinfog.github.io\_posts\typora-user-images\1564929489817.png)
+![1564929620032.png](https://i.loli.net/2019/08/05/AKPohv2WNz5Ble4.png)
 
 train文件夹：
 
-![1564929643230](C:\Users\10750\Documents\GitHub\berlinfog.github.io\_posts\typora-user-images\1564929643230.png)
+![1564929643230.png](https://i.loli.net/2019/08/05/SAdkbeyfN7w9hcD.png)
 
 接下来把这三个文件夹拖到object detection就ojbk了。
 
@@ -425,11 +425,11 @@ python train.py --logtostderr --train_dir=train/ --pipeline_config_path=pipeline
 
 开始跑代码，刷刷刷
 
-![1564930604889](C:\Users\10750\Documents\GitHub\berlinfog.github.io\_posts\typora-user-images\1564930604889.png)
+![1564930604889.png](https://i.loli.net/2019/08/05/XBmRMOAghltwiWn.png)
 
 会出来一堆模型，在train文件夹下面：
 
-![1564930662201](C:\Users\10750\Documents\GitHub\berlinfog.github.io\_posts\typora-user-images\1564930662201.png)
+![1564930662201.png](https://i.loli.net/2019/08/05/RvLaOQbMFHVCZBr.png)
 
 可以生成模型文件了：
 
@@ -484,7 +484,7 @@ for file in tar_file.getmembers():
 
 可以开始测试，发现效果一般：
 
-![1564931327907](C:\Users\10750\Documents\GitHub\berlinfog.github.io\_posts\typora-user-images\1564931327907.png)
+![1564931327907.png](https://i.loli.net/2019/08/05/UfWOqiXjQzTu1Ma.png)
 
 完事
 
