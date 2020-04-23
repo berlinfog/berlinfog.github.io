@@ -1,0 +1,465 @@
+---
+lsolayout:     post
+title:     2020-04-23-AnyQ阿里云centos7编译&测试&添加数据集
+subtitle:  python
+date:       2020-04-23
+author:     berlinfog
+header-img: img/post-bg-coffee.jpeg
+catalog: true
+tags:
+    - 自然语言处理
+---
+<h2>AnyQ阿里云centos7编译&测试&添加数据集</h2>
+
+```
+配置：
+本机Windows10家庭版
+服务器阿里云centos7 40G
+处理器：2.5 GHz主频的Intel ® Xeon ® Platinum 8163（Skylake） 
+存储40G
+```
+
+
+
+1.下载Anyq包：
+
+```
+git clone https://github.com/baidu/AnyQ.git
+```
+
+
+
+2.安装cmake
+
+安装gcc/g++的软件依赖>4.8.2（已安装请跳过）
+
+```
+yum install -y gcc gcc-c++ make automake
+```
+
+下载cmake源代码包（推荐3.3.2）
+
+```
+wget https://cmake.org/files/v3.3/cmake-3.3.2.tar.gz
+tar -zxvf cmake-3.3.2.tar.gz
+cd cmake-3.3.2/ 
+./bootstrap 
+gmake 
+gmake install
+```
+
+
+
+3.安装bison3.0，查看版本号如下
+
+```
+yum install bison
+bison -V
+```
+
+
+
+4.jdk安装
+
+```
+yum install java-1.8.0-openjdk-devel
+java -version
+```
+
+
+
+5.修改github下载体积大小
+
+```
+git config http.postBuffer 64288000
+```
+
+
+
+6.修改一堆AnyQ/cmake/external，部分换成gitee仓库加快一丢丢可怜的速度。
+
+第一个paddle.cmake
+
+```
+INCLUDE(ExternalProject)
+
+SET(PADDLE_SOURCES_DIR ${THIRD_PARTY_PATH}/paddle)
+SET(PADDLE_INSTALL_DIR ${THIRD_PARTY_PATH}/install/paddle)
+
+ExternalProject_Add(
+    extern_paddle
+    ${EXTERNAL_PROJECT_LOG_ARGS}
+    GIT_REPOSITORY       "https://github.com/PaddlePaddle/Paddle.git"
+    GIT_TAG   "v0.14.0"#这里
+    PREFIX               ${PADDLE_SOURCES_DIR}
+    CONFIGURE_COMMAND    mkdir -p ${PADDLE_INSTALL_DIR} && cd ${PADDLE_INSTALL_DIR} && ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${PADDLE_INSTALL_DIR} 
+                         -DCMAKE_BUILD_TYPE=Release -DWITH_PYTHON=OFF -DWITH_MKL=ON -DWITH_MKLDNN=OFF -DWITH_GPU=OFF -DWITH_FLUID_ONLY=ON <SOURCE_DIR>
+    BUILD_COMMAND        cd ${PADDLE_INSTALL_DIR} && make -j16#这里可以改成j1
+    INSTALL_COMMAND      cd ${PADDLE_INSTALL_DIR} && make inference_lib_dist
+    UPDATE_COMMAND       ""
+)
+
+add_custom_command(TARGET extern_paddle POST_BUILD
+    COMMAND mkdir -p third_party/include/paddle/ third_party/lib
+    COMMAND cp -rf ${PADDLE_INSTALL_DIR}/fluid_install_dir/paddle/fluid third_party/include/paddle
+    COMMAND cp -rf ${PADDLE_INSTALL_DIR}/fluid_install_dir/paddle/fluid/inference/lib* third_party/lib
+    COMMAND cp -rf ${PADDLE_INSTALL_DIR}/fluid_install_dir/third_party/install/mklml/include/* ${THIRD_PARTY_PATH}/include/
+    COMMAND cp -rf ${PADDLE_INSTALL_DIR}/fluid_install_dir/third_party/install/mklml/lib/* ${THIRD_PARTY_PATH}/lib/
+    COMMAND cp -rf  ${PADDLE_INSTALL_DIR}/fluid_install_dir/third_party/boost ${PADDLE_INSTALL_DIR}/fluid_install_dir/third_party/install/boost_1_41_0
+)
+```
+
+第二个xgboost.cmake，主要指定版本
+
+```
+INCLUDE(ExternalProject)
+
+SET(XGBOOST_SOURCES_DIR ${THIRD_PARTY_PATH}/xgboost)
+SET(XGBOOST_INSTALL_DIR ${XGBOOST_SOURCES_DIR}/src/xgboost)
+
+ExternalProject_Add(
+
+extern_xgboost
+
+${EXTERNAL_PROJECT_LOG_ARGS}
+
+DOWNLOAD_DIR ${XGBOOST_SOURCES_DIR}/src/
+
+DOWNLOAD_COMMAND git clone --recursive https://github.com/dmlc/xgboost.git && cd xgboost && git checkout v0.81#这里改v
+    DOWNLOAD_NO_PROGRESS  1
+    PREFIX          ${XGBOOST_SOURCES_DIR}
+    BUILD_COMMAND         ""
+    UPDATE_COMMAND ""
+    CONFIGURE_COMMAND ""
+    INSTALL_COMMAND  cd ${XGBOOST_INSTALL_DIR} && make -j1#这里改单线程
+    BUILD_IN_SOURCE 1
+)
+
+add_custom_command(TARGET extern_xgboost POST_BUILD
+    COMMAND mkdir -p third_party/lib/
+    COMMAND mkdir -p third_party/include/
+    COMMAND cp -r ${XGBOOST_INSTALL_DIR}/include/* third_party/include/
+    COMMAND cp -r ${XGBOOST_INSTALL_DIR}/lib/* third_party/lib
+    COMMAND cp ${XGBOOST_INSTALL_DIR}/rabit/lib/librabit.a ${XGBOOST_INSTALL_DIR}/dmlc-core/libdmlc.a third_party/lib/
+    COMMAND cp -r ${XGBOOST_INSTALL_DIR}/src third_party/
+    COMMAND cp -r ${XGBOOST_INSTALL_DIR}/dmlc-core/include/* ${XGBOOST_INSTALL_DIR}/rabit/include/* third_party/include/
+)
+
+```
+
+第三个，brpc.cmake，修改成gitee仓库
+
+```
+INCLUDE(ExternalProject)
+
+SET(BRPC_SOURCES_DIR ${THIRD_PARTY_PATH}/brpc)
+SET(BRPC_INSTALL_DIR ${THIRD_PARTY_PATH}/)
+SET(BRPC_DOWNLOAD_DIR  ${BRPC_SOURCES_DIR}/src/)
+#set(ENV{PATH} ${THIRD_PARTY_PATH}/bin:$ENV{PATH} )
+ExternalProject_Add(
+    extern_brpc
+    ${EXTERNAL_PROJECT_LOG_ARGS}
+    DEPENDS                extern_protobuf extern_glog extern_gflags extern_leveldb extern_openssl 
+    DOWNLOAD_DIR           ${BRPC_DOWNLOAD_DIR}
+    DOWNLOAD_COMMAND git   clone https://gitee.com/berlinfog/brpc.git && cd brpc && git checkout v0.9.0
+    DOWNLOAD_NO_PROGRESS   1
+    PREFIX                 ${BRPC_SOURCES_DIR}
+    BUILD_COMMAND          ""
+    UPDATE_COMMAND         ""
+    CONFIGURE_COMMAND      ""
+    INSTALL_COMMAND        cd ${BRPC_DOWNLOAD_DIR}/brpc/ && export PATH=${THIRD_PARTY_PATH}/bin:$ENV{PATH}
+                           && bash config_brpc.sh --headers=${BRPC_INSTALL_DIR}/include --libs=${BRPC_INSTALL_DIR}/lib --with-glog
+                           && make
+    BUILD_IN_SOURCE 1
+
+)
+
+add_custom_command(TARGET extern_brpc POST_BUILD
+    COMMAND mkdir -p third_party/lib/
+    COMMAND mkdir -p third_party/include/
+    COMMAND cp -r ${BRPC_DOWNLOAD_DIR}/brpc/output/* ${BRPC_INSTALL_DIR}/
+)
+```
+
+第四个protobuf.cmake换gitee
+
+```
+INCLUDE(ExternalProject)
+SET(OPTIONAL_ARGS
+    "-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}"
+    "-DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}"
+    "-DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}"
+    "-DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}"
+     "-Dprotobuf_WITH_ZLIB=ON"
+     "-DZLIB_ROOT:FILEPATH=${ZLIB_ROOT}"
+      ${EXTERNAL_OPTIONAL_ARGS})
+
+SET(OPTIONAL_CACHE_ARGS "-DZLIB_ROOT:STRING=${ZLIB_ROOT}")
+SET(PROTOBUF_REPO "https://gitee.com/berlinfog/protobuf.git")
+SET(PROTOBUF_TAG "v3.1.0")
+IF(USE_TENSORFLOW)
+    SET(PROTOBUF_TAG "v3.5.0")
+ENDIF()
+SET(PROTOBUF_SOURCES_DIR ${THIRD_PARTY_PATH}/protobuf)
+SET(PROTOBUF_INSTALL_DIR ${THIRD_PARTY_PATH})
+
+ExternalProject_Add(
+    extern_protobuf
+    ${EXTERNAL_PROJECT_LOG_ARGS}
+    DEPENDS             extern_zlib
+    GIT_REPOSITORY      ${PROTOBUF_REPO}
+    GIT_TAG             ${PROTOBUF_TAG}
+    PREFIX              ${PROTOBUF_SOURCES_DIR}
+    CONFIGURE_COMMAND   cd <SOURCE_DIR> && ${CMAKE_COMMAND} -DCMAKE_SKIP_RPATH=ON
+                        -Dprotobuf_BUILD_TESTS=OFF
+                        -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+                        -DCMAKE_INSTALL_PREFIX=${PROTOBUF_INSTALL_DIR}
+                        -DCMAKE_INSTALL_LIBDIR=lib ./cmake
+    BUILD_COMMAND       cd <SOURCE_DIR> && make -j8 && make install
+    UPDATE_COMMAND      ""
+    INSTALL_COMMAND     ""
+)
+
+add_custom_command(TARGET extern_protobuf POST_BUILD
+    COMMAND cp ${PROTOBUF_INSTALL_DIR}/bin/protoc ${PROTOBUF_INSTALL_DIR}/lib
+)
+
+```
+
+
+
+7.进入安装包开始编译，以上配置好cmake一般不会报错，但是make报错，出了问题就再make一下就行，成功标志为有提示run_server这个服务生成了：
+
+```
+cd /data/xiaoyichao/projects/AnyQ
+mkdir build && cd build
+cmake ..
+```
+
+可以用make|tee eva.txt保存一下出错在哪里的信息
+
+成功标志：
+
+```
+[100%] Linking CXX executable run_server
+[100%] Built target run_server
+```
+
+
+
+8.系统编译成功以后，在AnyQ/build目录下，执行下面的命令来获取AnyQ定制solr、AnyQ示例配置，注意要使用python2，这里用的是2.7版本
+
+```
+cp ../tools/anyq_deps.sh .
+sh anyq_deps.sh
+cp ../tools/solr -rp solr_script
+sh solr_script/anyq_solr.sh solr_script/sample_docs
+```
+
+
+
+9.开始测试原来的数据集
+
+```
+./run_server
+```
+
+
+
+10.搞一个新终端
+
+```
+curl 127.0.0.1:8999/anyq?question=以前西凉是现在什么地方
+```
+
+
+
+11.需要换个新的数据集测试的往下看
+
+
+
+12.windows往阿里云上传文件：
+
+```linux
+pscp C:\Users\10750\Desktop\WebQA.v1.0\WebQA.v1.0\train root@39.100.233.32:/dododo/AnyQ
+```
+
+![1587546025494](C:\Users\10750\AppData\Roaming\Typora\typora-user-images\1587546025494.png)
+
+
+
+13.导入数据集，格式如：
+
+![1587546103307](C:\Users\10750\AppData\Roaming\Typora\typora-user-images\1587546103307.png)
+
+注意这中间的空格都是\t而不是普通的空格并且最后一行不为空
+
+
+
+14.将灌库文件faq_file(utf8编码)转换成Json格式：
+
+```
+cp -rp ../tool/solr ./solr_script
+python solr_script/make_json.py train faq/schema_format train_json
+```
+
+接下来把数据编程符合格式的json格式：
+
+```
+awk -F "\t" '{print ++ind"\t"$0}' train_json > train_json.index
+```
+
+索引ID添加完毕以后，即可对已添加完索引ID的文件 train_json.index构建**语义索引库**。
+
+
+
+15.接下来对于/build/example/conf中的文件进行修改，目录如下
+
+![1587546547124](C:\Users\10750\AppData\Roaming\Typora\typora-user-images\1587546547124.png)
+
+首先修改dict.conf
+
+```
+name: "example_dict_conf"
+dict_config {
+    name: "rank_weights"
+    type: "String2FloatAdapter"
+    path: "./rank_weights"
+}
+dict_config {
+    name: "lac"
+    type: "WordsegAdapter"
+    path: "./wordseg_utf8"
+}
+dict_config{
+        name: "fluid_simnet"
+        type: "PaddleSimAdapter"
+        path: "./simnet"
+}
+dict_config {
+        name: "annoy_knowledge_dict"
+        type: "String2RetrievalItemAdapter"
+        path: "train_json.index"#把测试集合改一下
+}
+```
+
+接下来修改一下analysis.conf
+
+```
+name: "analysis_conf"
+analysis_method {
+    name: "method_wordseg"
+    type: "AnalysisWordseg"
+    using_dict_name: "lac"
+}
+analysis_method {
+        name: "method_simnet_emb"
+        type: "AnalysisSimNetEmb"
+        using_dict_name: "fluid_simnet"
+        dim: 128
+        query_feed_name: "left"
+        cand_feed_name: "right"
+        embedding_fetch_name: "tanh.tmp"
+}
+```
+
+修改一下retrieval.conf
+
+```
+retrieval_plugin {
+        name : "semantic_recall"
+        type : "SemanticRetrievalPlugin"
+        vector_size : 128
+        search_k : 10000
+        index_path : "./semantic.annoy"
+        using_dict_name: "annoy_knowledge_dict"
+        num_result : 100#指定数据集的问题数目
+}
+```
+
+修改一下rank.conf
+
+```
+name : "test_rank"
+top_result: 1
+matching_config {
+    name : "jaccard_sim"
+    type : "JaccardSimilarity"
+    output_num : 1
+    rough : false
+}
+
+# Paddle SimNet匹配模型相似度
+matching_config {
+    name: "fluid_simnet_feature"
+    type: "PaddleSimilarity"
+    using_dict_name: "fluid_simnet"
+    output_num : 1
+    rough : false
+    query_feed_name: "left"
+    cand_feed_name: "right"
+    score_fetch_name: "cos_sim_0.tmp"
+}
+rank_predictor {
+    type: "PredictLinearModel"
+    using_dict_name: "rank_weights"
+}
+threshold : 0.5
+```
+
+
+
+16.接下来再为`train.index`构建**语义索引库**（在`AnyQ/build`下执行）：
+
+```
+ ./annoy_index_build_tool example/conf/ example/conf/analysis.conf train_json.index 128 10 semantic.annoy 1>std 2>err
+```
+
+![1587549411116](C:\Users\10750\AppData\Roaming\Typora\typora-user-images\1587549411116.png)
+
+
+
+17.随后可以开始启动啦
+
+```
+./run_server
+```
+
+
+
+18.询问
+
+```
+curl 127.0.0.1:8999/anyq?question=以前西凉是现在什么地方
+```
+
+
+
+
+
+
+
+
+
+
+
+快速改配置
+
+```
+cd /dododo/AnyQ/build/example/conf
+```
+
+快速运行
+
+```
+cd /dododo/AnyQ/build
+./run_server
+```
+
+![1587613680335](C:\Users\10750\AppData\Roaming\Typora\typora-user-images\1587613680335.png)
+
+服务器返回相应结果
+
+![1587613709730](C:\Users\10750\AppData\Roaming\Typora\typora-user-images\1587613709730.png)
+
+![1587613765231](C:\Users\10750\AppData\Roaming\Typora\typora-user-images\1587613765231.png)
