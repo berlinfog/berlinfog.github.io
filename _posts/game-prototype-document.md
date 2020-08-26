@@ -1,6 +1,6 @@
 ---
 lsolayout:     post
-title:     game-prototype-document
+title:      游戏原型文档
 subtitle:  产品
 date:       2020-08-02
 author:     berlinfog
