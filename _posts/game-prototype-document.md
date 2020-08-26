@@ -7,7 +7,7 @@ author:     berlinfog
 header-img: img/post-bg-coffee.jpeg
 catalog: true
 tags:
-    - game-prototype-document
+    - 游戏原型文档
 ---
 
 #### 游戏原型文档
