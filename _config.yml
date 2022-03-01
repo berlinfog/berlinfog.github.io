@@ -3,7 +3,7 @@ title: berlinfog
 SEOTitle: 柏林迷雾的博客 | berlinfog
 header-img: img/post-bg-desk.jpg
 email: k1075060506@gmail.com
-description: "苟利国家生死以，岂因祸福避趋之"
+description: "berlinfog blog"
 keyword: "BY, BY Blog, Apple, iPhone"
 url: "http://berlinfog.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
@@ -18,12 +18,10 @@ sidebar-about-description: "诚朴勤仁"
 
 # SNS settings
 RSS: false
-# weibo_username:     qiubaiying
 zhihu_username:     hiler-hi
 github_username:    berlinfog
 facebook_username:  longlong.li.3538
 jianshu_username:   d0cd932fd125
-#twitter_username:   qiubaiying
 
 
 

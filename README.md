@@ -1,10 +1,10 @@
 (https://github.com/Huxpro/huxpro.github.io) 
+(https://github.com/qiubaiying/qiubaiying.github.io)
 (http://www.jianshu.com/p/e68fba58f75c)
-[wiki]
 (https://github.com/qiubaiying/qiubaiying.github.io/wiki/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B)
 
 >
-### [查看博客戳这里 👆](<https://berlinfog.github.io/>)
+### [My blog is here 👆](<https://berlinfog.github.io/>)
 
 ## 使用
 
@@ -86,8 +86,7 @@ Mini-About-Me 这个模块将在你的头像下面，展示你所有的社交账
 
 ### Social-media Account
 
-在下面输入的社交账号，没有的添加的不会显示在侧边框中。新加入了[简书](https:/www.jianshu.com)链接, <http://www.jianshu.com/u/e71990ada2fd>
-
+input social network account below
 	# SNS settings
 	RSS: false
 	jianshu_username: 	jianshu_id 
@@ -139,9 +138,7 @@ iframe在不同的设备中，将会自动的调整大小。保留内边距是�
 
 
 ## 致谢
-
-1. 以上均转载[BY Blog](<http://qiubaiying.top/>)，自己稍微进行了一点点修改，感谢大佬。
-2. 这个模板是从这里 [Hux](https://github.com/Huxpro/huxpro.github.io) fork 的, 感谢这个作者。 
-3. 感谢 Jekyll、Github Pages 和 Bootstrap!
+1. 这个模板是从这里 [Hux](https://github.com/Huxpro/huxpro.github.io) fork 的, 感谢这个作者。 
+2. 感谢 Jekyll、Github Pages 和 Bootstrap!
 
 
