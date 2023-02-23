@@ -71,7 +71,9 @@ Running on local URL:  http://127.0.0.1:7860
 
 11.到settings的stable diffusion选择SD VAE为840000这个模型，点击apply settings保存。
 
-12.点击txt2img，在prompt输入
+12.选择Stable Diffusion checkpoint为model.ckpt，或者可以下载一个新的效果更好的放入D:\stable-diffusion-webui\models\Stable-diffusion文件夹里面。
+
+13.点击txt2img，在prompt输入
 
 ```bat
 <lora:koreanDollLikeness_v15:0.66>, best quality, ultra high res, (photorealistic:1.4), 1girl, (intricate white sleeveless maid clothes:1), (Kpop idol), (aegyo sal:1), (busty), ((cleavage)), (curvy), large breasts, huge breasts, (light blonde twintail:1), ((puffy eyes)), from below, looking at viewer, laughing, happy
@@ -88,6 +90,14 @@ paintings, sketches, (worst quality:2), (low quality:2), (normal quality:2), low
 
 
 其他：常见词汇比如a girl，如果想要加强语气可以用(thin:1.5),lora可以多个结合，但是测试多个lora加起来超过1可能会不太正常。
+
+参考：
+
+https://www.bilibili.com/video/BV12x4y1V71Q/?spm_id_from=333.337.search-card.all.click&vd_source=ff110f9f6f3d4b61907ecd5725474b85
+
+https://github.com/AUTOMATIC1111/stable-diffusion-webui
+
+https://github.com/AUTOMATIC1111/stable-diffusion-webui
 
 
 
