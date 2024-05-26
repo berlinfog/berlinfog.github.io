@@ -3,83 +3,66 @@
 >
 ### [My blog is here 👆](<https://berlinfog.github.io/>)
 
-## 使用
+## how to use
 
 * begin
-	* [environment ](#环境)
-	* [start](#开始)
-	* [write articels](#撰写博文)
+	* [environment ]
+	* [start]
+	* [write articels]
 * components
-	* [side bar](#侧边栏)
-	* [about-me](#mini-about-me)
-	* [featured-tags](#featured-tags)
-	* [HTML5 keynote-layout)](#keynote-layout)
-* 评论与 Google/Baidu Analytics
+	* [side bar]
+	* [about-me]
+	* [featured-tags]
+	* [HTML5 keynote-layout)]
+* comments and analytics
 	* [comment](#comment)
 	* [analytics](#analytics) 
 
 
 ### environment 
 
-如果你安装了 [jekyll](http://jekyllcn.com/)，那你只需要在命令行输入`jekyll serve` 或 `jekyll s`就能在本地浏览器中输入`http://127.0.0.1:4000/`预览主题，对主题的修改也能实时展示（需要强刷浏览器）。
+If you install [jekyll](http://jekyllcn.com/) locally，You can input `jekyll serve` or `jekyll s`, then you can input `http://127.0.0.1:4000/`to check changes for your blog。
 
 
 
 ### start
 
-你可以通用修改 `_config.yml`文件来轻松的开始搭建自己的博客:
+Modify `_config.yml` to build:
 
 ```
 # Site settings
-title: BY Berlinfog                    # 你的博客网站标题
+title: BY Berlinfog                
 SEOTitle: berlinfog
-description: "Hey"	   	   # 随便说点，描述一下
+description: "Hey"	   
 ```
 
-Jekyll官方网站还有很多的参数可以调，比如设置文章的链接形式...网址在这里：[Jekyll - Official Site](http://jekyllrb.com/) 中文版的在这里：[Jekyll中文](http://jekyllcn.com/).
+More formats available at [Jekyll - Official Site](http://jekyllrb.com/) chinses：[Jekyll中文](http://jekyllcn.com/).
 
 ### wrtie articles
 
-要发表的文章一般以 **Markdown** 的格式放在这里`_posts/`，你只要看看这篇模板里的文章你就立刻明白该如何设置。
-
-yaml 头文件长这样:
-
-```
 ---
 layout:     post
-title:      定时器 你真的会使用吗？
-subtitle:   iOS定时器详解
+title:      Do you really know how to use the timer?
+subtitle:   Detailed explanation of iOS timers
 date:       2017-12-13
 author:     //
 header-img: img/post-bg-ios9-web.jpg
 catalog: 	 true
 tags:
     - iOS
-    - 定时器
+    - Timer
 ---
 
-```
+### Side bar
 
-### 侧边栏
-
-看右边:
-![](https://raw.githubusercontent.com/qiubaiying/qiubaiying.github.io/master/img/readme-side.png)
-
-设置是在 `_config.yml`文件里面的`Sidebar settings`那块。
+The settings are in the _config.yml file under the Sidebar settings section.
 
 ```
 # Sidebar settings
-sidebar: true  #添加侧边栏
-sidebar-about-description: "简单的描述一下你自己"
-sidebar-avatar: /img/avatar-by.jpg     #你的大头贴，请使用绝对地址.注意：名字区分大小写！后缀名也是
+sidebar: true  # Add sidebar
+sidebar-about-description: "Briefly describe yourself"
+sidebar-avatar: /img/avatar-by.jpg     # Your avatar, please use an absolute path. Note: the name is case-sensitive, including the file extension.
 ```
-
-侧边栏是响应式布局的，当屏幕尺寸小于992px的时候，侧边栏就会移动到底部。具体请见bootstrap栅格系统 <http://v3.bootcss.com/css/>
-
-
-### Mini About Me
-
-Mini-About-Me 这个模块将在你的头像下面，展示你所有的社交账号。这个也是响应式布局，当屏幕变小时候，会将其移动到页面底部，只不过会稍微有点小变化，具体请看代码。
 
 ### Social-media Account
 
@@ -98,13 +81,9 @@ input social network account below
 
 ### Keynote Layout
 
-HTML5幻灯片的排版：
+This section is used for embedding HTML-formatted slides, typically using Reveal.js, Impress.js, Slides, Prezi, etc. I believe a modern blog should not lack the ability to embed HTML slides.
 
-![](https://camo.githubusercontent.com/f30347a118171820b46befdf77e7b7c53a5641a9/687474703a2f2f6875616e677875616e2e6d652f696d672f626c6f672d6b65796e6f74652e6a7067)
-
-这部分是用于占用html格式的幻灯片的，一般用到的是 Reveal.js, Impress.js, Slides, Prezi 等等.我认为一个现代化的博客怎么能少了放html幻灯的功能呢~
-
-其主要原理是添加一个 `iframe`，在里面加入外部链接。你可以直接写到头文件里面去，详情请见下面的yaml头文件的写法。
+The main principle is to add an iframe that includes an external link. You can directly write this in the front matter. See the YAML front matter example below for details.
 
 ```
 ---
@@ -113,29 +92,11 @@ iframe:     "http://huangxuan.me/js-module-7day/"
 ---
 ```
 
-iframe在不同的设备中，将会自动的调整大小。保留内边距是为了让手机用户可以向下滑动，以及添加更多的内容。
+The iframe will automatically adjust its size on different devices. Padding is retained to allow mobile users to scroll down and add more content.
 
 
-### Comment
-
-博客不仅支持 [Disqus](http://disqus.com) 评论系统,还加入了 [Gitalk](https://gitalk.github.io/) 评论系统，[支持 Markdwon 语法](https://guides.github.com/features/mastering-markdown/)，cool~
-
-
-#### Gitalk
-
-优点：界面干净简洁，利用 Github issue API 做的评论插件，使用 Github 帐号进行登录和评论，最喜欢的支持 Markdown 语法，对于程序员来说真是太 cool 了。
-
-缺点：配置比较繁琐，每篇文章的评论都需要初始化。
-
-
-### Analytics
-
-网站分析，现在支持百度统计和Google Analytics。需要去官方网站注册一下，然后将返回的code贴在下面：
-
-
-
-## 致谢
-1. 这个模板是从这里 [Hux](https://github.com/Huxpro/huxpro.github.io) fork 的, 感谢这个作者。 
-2. 感谢 Jekyll、Github Pages 和 Bootstrap!
+## Thanks
+1. This repo forks from [Hux](https://github.com/Huxpro/huxpro.github.io) and (qiubaiying/qiubaiying.github.io）
+2. Thanks for Jekyll, Github Pages and Bootstrap!
 
 
