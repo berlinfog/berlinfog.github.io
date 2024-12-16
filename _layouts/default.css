@@ -1,4 +1,4 @@
-#live2d-container {
+#live2d-container2 {
     transform: scale(0.5); /* 缩放到 50% */
     transform-origin: center; /* 缩放中心点 */
     position: fixed; /* 保证模型位置 */
@@ -7,3 +7,4 @@
     width: 300px; /* 按实际模型大小调整 */
     height: 400px;
 }
+
