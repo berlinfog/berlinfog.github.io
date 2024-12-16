@@ -39,7 +39,24 @@
 <script src="https://cdn.jsdelivr.net/gh/journey-ad/blog-img@76ba2b3/live2d/lib/pio.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/journey-ad/blog-img@76ba2b3/live2d/lib/pio_sdk4.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/journey-ad/blog-img@76ba2b3/live2d/lib/load.js"></script>
+<script>
 
+window.addEventListener("DOMContentLoaded", () => {
+    const pio = new Paul_Pio({
+        model: { scale: 1.0 }, // 原始大小
+        display: { position: "right", width: 200, height: 400 },
+    });
+
+    // 动态调整模型大小
+    setTimeout(() => {
+        const live2d = document.querySelector("#live2d-container canvas");
+        if (live2d) {
+            live2d.style.transform = "scale(0.5)"; // 缩小 50%
+            live2d.style.transformOrigin = "center";
+        }
+    }, 1000);
+});
+</script>
 </body>
 
 </html>
