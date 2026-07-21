@@ -1,0 +1,8 @@
+#live2d-widget {
+  z-index: 20;
+  pointer-events: none;
+}
+
+#live2d-widget canvas {
+  pointer-events: auto;
+}
