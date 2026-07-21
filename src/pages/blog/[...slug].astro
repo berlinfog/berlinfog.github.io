@@ -1,0 +1,20 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatDate, getPublishedPosts } from "../../lib/posts";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({ params: { slug: post.id.replace(/\.md$/, "") }, props: { post } }));
+}
+
+const { post } = Astro.props as { post: CollectionEntry<"posts"> };
+const { Content } = await render(post);
+---
+<BaseLayout title={post.data.title} description={post.data.description ?? post.data.subtitle}>
+  <article class="article-shell">
+    <header class="article-header"><p class="eyebrow">NOTE / {formatDate(post.data.date)}</p><h1>{post.data.title}</h1>{post.data.subtitle && <p>{post.data.subtitle}</p>}<div class="tags">{post.data.tags.map((tag) => <a href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>)}</div></header>
+    <div class="prose"><Content /></div>
+    <footer class="article-footer"><a href="/blog/">← Back to all posts</a><span>That's it.</span></footer>
+  </article>
+</BaseLayout>

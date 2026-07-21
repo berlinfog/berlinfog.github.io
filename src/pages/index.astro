@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../config";
+import { formatDate, getPublishedPosts, postUrl } from "../lib/posts";
+
+const posts = await getPublishedPosts();
+const featured = posts.slice(0, 4);
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))].slice(0, 8);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">BERLINFOG'S CORNER</p>
+      <h1>Code & Photo</h1>
+      <p class="lede">This is {SITE.name}</p>
+      <div class="hero-actions"><a class="button primary" href="/blog/">Articles <span>→</span></a><a class="button ghost" href="/about/">About</a></div>
+    </div>
+    <div class="hero-art"><img class="hero-portrait" src="/assets/jalter-portrait.png" alt="Jeanne d'Arc Alter illustration" /></div>
+  </section>
+
+  <section class="section-heading"><div><p class="eyebrow">RECENT POSTS</p><h2>Recent</h2></div><a href="/blog/">All →</a></section>
+  <div class="post-grid">
+    {featured.map((post, index) => <article class="post-card"><p class="post-index">0{index + 1}</p><div><p class="meta">{formatDate(post.data.date)}</p><h3><a href={postUrl(post.id)}>{post.data.title}</a></h3>{post.data.subtitle && <p class="excerpt">{post.data.subtitle}</p>}<div class="tags">{post.data.tags.slice(0, 3).map((tag) => <a href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>)}</div></div></article>)}
+  </div>
+
+  <section class="tag-band"><p>Find by tag</p><div>{tags.map((tag) => <a href={`/tags/${encodeURIComponent(tag)}/`}>{tag}</a>)}</div></section>
+</BaseLayout>

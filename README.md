@@ -1,102 +1,34 @@
-(https://berlinfog.github.io/)
+# berlinfog homepage
 
->
-### [My blog is here 👆](<https://berlinfog.github.io/>)
+新版个人主页：Astro 静态站点，文章仍使用 Markdown。旧 Jekyll 文章已迁入，并为旧的日期链接生成 301 跳转。
 
-## how to use
+## 本地预览
 
-* begin
-	* [environment ]
-	* [start]
-	* [write articels]
-* components
-	* [side bar]
-	* [about-me]
-	* [featured-tags]
-	* [HTML5 keynote-layout)]
-* comments and analytics
-	* [comment](#comment)
-	* [analytics](#analytics) 
-
-
-### environment 
-
-If you install [jekyll](http://jekyllcn.com/) locally，You can input `jekyll serve` or `jekyll s`, then you can input `http://127.0.0.1:4000/`to check changes for your blog。
-
-
-
-### start
-
-Modify `_config.yml` to build:
-
-```
-# Site settings
-title: BY Berlinfog                
-SEOTitle: berlinfog
-description: "Hey"	   
+```bash
+npm install
+npm run dev
 ```
 
-More formats available at [Jekyll - Official Site](http://jekyllrb.com/) chinses：[Jekyll中文](http://jekyllcn.com/).
+访问 `http://localhost:4321`。
 
-### wrtie articles
+## 写文章
 
+在 `src/content/posts/` 新建一个 Markdown 文件：
+
+```md
 ---
-layout:     post
-title:      Do you really know how to use the timer?
-subtitle:   Detailed explanation of iOS timers
-date:       2017-12-13
-author:     //
-header-img: img/post-bg-ios9-web.jpg
-catalog: 	 true
-tags:
-    - iOS
-    - Timer
+title: 新文章标题
+date: 2026-07-21
+tags: [notes]
 ---
 
-### Side bar
-
-The settings are in the _config.yml file under the Sidebar settings section.
-
-```
-# Sidebar settings
-sidebar: true  # Add sidebar
-sidebar-about-description: "Briefly describe yourself"
-sidebar-avatar: /img/avatar-by.jpg     # Your avatar, please use an absolute path. Note: the name is case-sensitive, including the file extension.
+正文写在这里。
 ```
 
-### Social-media Account
+## 改主题
 
-input social network account below
-	# SNS settings
-	RSS: false
-	jianshu_username: 	jianshu_id 
-	zhihu_username:     username
-	facebook_username:  username
-	github_username:    username
-	# weibo_username:   username
+- `src/config.ts`：站点名称、简介、社交链接、默认皮肤。
+- `src/styles/global.css`：三套皮肤的颜色变量和所有视觉样式。
+- 右上角的月亮和星星按钮可在浏览器中即时切换明暗与配色。
 
-
-​	
-
-
-### Keynote Layout
-
-This section is used for embedding HTML-formatted slides, typically using Reveal.js, Impress.js, Slides, Prezi, etc. I believe a modern blog should not lack the ability to embed HTML slides.
-
-The main principle is to add an iframe that includes an external link. You can directly write this in the front matter. See the YAML front matter example below for details.
-
-```
----
-layout:     keynote
-iframe:     "http://huangxuan.me/js-module-7day/"
----
-```
-
-The iframe will automatically adjust its size on different devices. Padding is retained to allow mobile users to scroll down and add more content.
-
-
-## Thanks
-1. This repo forks from [Hux](https://github.com/Huxpro/huxpro.github.io) and (qiubaiying/qiubaiying.github.io）
-2. Thanks for Jekyll, Github Pages and Bootstrap!
-
-
+GitHub Pages 使用 `.github/workflows/deploy.yml` 自动部署。部署前在仓库 **Settings → Pages** 中将 Source 设为 **GitHub Actions**。

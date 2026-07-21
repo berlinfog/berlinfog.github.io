@@ -1,0 +1,5 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { SITE } from "../config";
+---
+<BaseLayout title="About"><section class="page-intro about-intro"><p class="eyebrow">ABOUT</p><h1>Hi, <em>this is {SITE.name}</em></h1><p>Place for code and photo</p></section><section class="about-grid"><article><p class="eyebrow">Hobbies</p><h2>Travel & Photography</h2></article><article class="contact-card"><p class="eyebrow">Contact</p><a href={SITE.github} target="_blank">GitHub ↗</a><a href={`mailto:${SITE.email}`}>{SITE.email}</a><a href="/assets/resume.pdf" target="_blank">Resume ↗</a></article></section></BaseLayout>

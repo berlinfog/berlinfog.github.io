@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatDate, getPublishedPosts, postUrl } from "../../lib/posts";
+const posts = await getPublishedPosts();
+---
+<BaseLayout title="Blog">
+  <section class="page-intro"><p class="eyebrow">ARCHIVE</p><h1>All posts</h1><p>The old notes are here too. I will keep adding things when I have something to say.</p></section>
+  <div class="archive-list">
+    {posts.map((post) => <article><time>{formatDate(post.data.date)}</time><div><h2><a href={postUrl(post.id)}>{post.data.title}</a></h2>{post.data.subtitle && <p>{post.data.subtitle}</p>}<div class="tags">{post.data.tags.map((tag) => <a href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>)}</div></div><a class="arrow" href={postUrl(post.id)} aria-label={`Read ${post.data.title}`}>↗</a></article>)}
+  </div>
+</BaseLayout>
