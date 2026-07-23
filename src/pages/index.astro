@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { SITE } from "../config";
 import { formatDate, getPublishedPosts, postUrl } from "../lib/posts";
+import { photos } from "../lib/photos";
 
 const posts = await getPublishedPosts();
 const featured = posts.slice(0, 4);
@@ -22,6 +23,11 @@ const tags = [...new Set(posts.flatMap((post) => post.data.tags))].slice(0, 8);
   <section class="section-heading"><div><p class="eyebrow">RECENT POSTS</p><h2>Recent</h2></div><a href="/blog/">All →</a></section>
   <div class="post-grid">
     {featured.map((post, index) => <article class="post-card"><p class="post-index">0{index + 1}</p><div><p class="meta">{formatDate(post.data.date)}</p><h3><a href={postUrl(post.id)}>{post.data.title}</a></h3>{post.data.subtitle && <p class="excerpt">{post.data.subtitle}</p>}<div class="tags">{post.data.tags.slice(0, 3).map((tag) => <a href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>)}</div></div></article>)}
+  </div>
+
+  <section class="section-heading photo-section-heading"><div><p class="eyebrow">SELECTED PHOTOS</p><h2>Through the lens</h2></div><a href="/gallery/">Gallery →</a></section>
+  <div class="featured-photo-grid">
+    {photos.slice(0, 3).map((photo) => <a class="featured-photo" href="/gallery/"><img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" /></a>)}
   </div>
 
   <section class="tag-band"><p>Find by tag</p><div>{tags.map((tag) => <a href={`/tags/${encodeURIComponent(tag)}/`}>{tag}</a>)}</div></section>

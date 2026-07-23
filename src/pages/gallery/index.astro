@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { photos } from "../../lib/photos";
+---
+
+<BaseLayout title="Gallery" description="Photography by berlinfog.">
+  <section class="gallery-intro">
+    <div>
+      <p class="eyebrow">PHOTO JOURNAL</p>
+      <h1>Places that<br /><em>stayed with me.</em></h1>
+    </div>
+    <p>{photos.length} frames from roads, ridges, late skies, and whatever made me stop walking.</p>
+  </section>
+
+  <section class="gallery-grid" aria-label="Photography gallery">
+    {photos.map((photo, index) => (
+      <button class="gallery-photo" data-photo-trigger data-src={photo.src} data-alt={photo.alt} data-title={photo.title} aria-label={`Open ${photo.title}`}>
+        <img src={photo.src} alt={photo.alt} loading={index < 4 ? "eager" : "lazy"} decoding="async" />
+      </button>
+    ))}
+  </section>
+
+  <dialog class="photo-lightbox" data-lightbox aria-label="Enlarged photograph">
+    <button class="lightbox-close" data-lightbox-close aria-label="Close enlarged photo">×</button>
+    <figure>
+      <img data-lightbox-image src={photos[0].src} alt="" />
+      <figcaption data-lightbox-caption></figcaption>
+    </figure>
+  </dialog>
+
+  <script is:inline>
+    const lightbox = document.querySelector("[data-lightbox]");
+    const lightboxImage = document.querySelector("[data-lightbox-image]");
+    const lightboxCaption = document.querySelector("[data-lightbox-caption]");
+
+    document.querySelectorAll("[data-photo-trigger]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!lightbox || !lightboxImage || !lightboxCaption) return;
+        lightboxImage.src = button.dataset.src || "";
+        lightboxImage.alt = button.dataset.alt || "";
+        lightboxCaption.textContent = button.dataset.title || "";
+        lightbox.showModal();
+      });
+    });
+
+    document.querySelector("[data-lightbox-close]")?.addEventListener("click", () => lightbox?.close());
+    lightbox?.addEventListener("click", (event) => {
+      if (event.target === lightbox) lightbox.close();
+    });
+  </script>
+</BaseLayout>
