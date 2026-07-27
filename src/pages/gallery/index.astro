@@ -14,7 +14,7 @@ import { photos } from "../../lib/photos";
 
   <section class="gallery-grid" aria-label="Photography gallery">
     {photos.map((photo, index) => (
-      <button class="gallery-photo" data-photo-trigger data-src={photo.src} data-alt={photo.alt} data-title={photo.title} aria-label={`Open ${photo.title}`}>
+      <button class="gallery-photo" data-photo-trigger data-src={photo.src} data-alt={photo.alt} aria-label={`Open ${photo.title}`}>
         <img src={photo.src} alt={photo.alt} loading={index < 4 ? "eager" : "lazy"} decoding="async" />
       </button>
     ))}
@@ -24,21 +24,18 @@ import { photos } from "../../lib/photos";
     <button class="lightbox-close" data-lightbox-close aria-label="Close enlarged photo">×</button>
     <figure>
       <img data-lightbox-image src={photos[0].src} alt="" />
-      <figcaption data-lightbox-caption></figcaption>
     </figure>
   </dialog>
 
   <script is:inline>
     const lightbox = document.querySelector("[data-lightbox]");
     const lightboxImage = document.querySelector("[data-lightbox-image]");
-    const lightboxCaption = document.querySelector("[data-lightbox-caption]");
 
     document.querySelectorAll("[data-photo-trigger]").forEach((button) => {
       button.addEventListener("click", () => {
-        if (!lightbox || !lightboxImage || !lightboxCaption) return;
+        if (!lightbox || !lightboxImage) return;
         lightboxImage.src = button.dataset.src || "";
         lightboxImage.alt = button.dataset.alt || "";
-        lightboxCaption.textContent = button.dataset.title || "";
         lightbox.showModal();
       });
     });
