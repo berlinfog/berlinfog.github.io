@@ -14,8 +14,8 @@ import { photos } from "../../lib/photos";
 
   <section class="gallery-grid" aria-label="Photography gallery">
     {photos.map((photo, index) => (
-      <button class="gallery-photo" data-photo-trigger data-src={photo.src} data-alt={photo.alt} aria-label={`Open ${photo.title}`}>
-        <img src={photo.src} alt={photo.alt} loading={index < 4 ? "eager" : "lazy"} decoding="async" />
+      <button class="gallery-photo" data-photo-trigger data-src={photo.src} aria-label={`Open photograph ${index + 1}`}>
+        <img src={photo.src} alt="" loading={index < 4 ? "eager" : "lazy"} decoding="async" />
       </button>
     ))}
   </section>
@@ -23,7 +23,7 @@ import { photos } from "../../lib/photos";
   <dialog class="photo-lightbox" data-lightbox aria-label="Enlarged photograph">
     <button class="lightbox-close" data-lightbox-close aria-label="Close enlarged photo">×</button>
     <figure>
-      <img data-lightbox-image src={photos[0].src} alt="" />
+      <img data-lightbox-image src={photos[0]?.src ?? ""} alt="" />
     </figure>
   </dialog>
 
@@ -35,7 +35,7 @@ import { photos } from "../../lib/photos";
       button.addEventListener("click", () => {
         if (!lightbox || !lightboxImage) return;
         lightboxImage.src = button.dataset.src || "";
-        lightboxImage.alt = button.dataset.alt || "";
+        lightboxImage.alt = "";
         lightbox.showModal();
       });
     });
